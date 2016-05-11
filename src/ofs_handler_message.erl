@@ -147,6 +147,7 @@ notify(Message, State) ->
     CallbackState = State#?STATE.callback_state,
     {MsgType, _, _} = DecodedMsg = of_msg_lib:decode(Message),
     Subscribers = ets:lookup(Subscriptions, MsgType),
+    icontrol_ofsh:handle_message(Message, CallbackState), %% TODO fix subscribers
     notify_subscriber(Subscribers, DecodedMsg, CallbackState).
 
 notify_subscriber([], _Message, _CallbackState) ->

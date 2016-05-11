@@ -1,6 +1,7 @@
 ofs_handler
 ===========
 # OpenFlow Switch Handler
+# WARNING!! not original code
 
 ofs_handler provides a higher level, somewhat abstracted interface to
 an OpenFlow switch.  It manages of_driver connections to the

@@ -20,6 +20,7 @@
 {application, ofs_handler,
  [{description, "OFS-Handler Library for Erlang"},
   {vsn, "0.1"},
+  {registered, []},
   {applications, [kernel,
                   stdlib]},
   {env, [{callback_module, ofs_handler_default_handler}]},

@@ -254,6 +254,9 @@ locate_active(DatapathId) ->
         [#handlers_table{handler_pid = HandlerPid}] -> HandlerPid
     end.
 
+register_handler({ok, DatapathId}) ->
+    register_handler(DatapathId);
+
 register_handler(DatapathId) ->
     true = ets:insert_new(?HANDLERS_TABLE, #handlers_table{
                                                 datapath_id = DatapathId,

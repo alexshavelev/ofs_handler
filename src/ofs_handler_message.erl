@@ -110,6 +110,15 @@ handle_call(_Request, _From, State) ->
 
 handle_cast(stop, State) ->
     {stop, normal, State};
+handle_cast({message, _Connection, Message}, State) ->
+    % switch sent us a message
+    case notify(Message, State) of
+        ok ->
+            ok;
+        {terminate, Reason} ->
+            signal_stop(Reason)
+    end,
+    {reply, ok, State};
 handle_cast(_Msg, State) ->
     {noreply, State}.
 

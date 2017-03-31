@@ -96,7 +96,7 @@ ofd_connect(HandlerPid, IpAddr, DatapathId, Features, Version, Connection, AuxId
             {connect, IpAddr, DatapathId, Features, Version, Connection, AuxId, Opt}).
 
 ofd_message(MessagePid, Connection, Msg) ->
-    gen_server:call(MessagePid, {message, Connection, Msg}).
+    gen_server:call(MessagePid, {message, Connection, Msg}, 20000).
 
 ofd_error(MessagePid, Connection, Error) ->
     gen_server:call(MessagePid, {error, Connection, Error}).

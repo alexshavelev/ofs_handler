@@ -151,30 +151,35 @@ signal_stop(Reason) ->
 do_callback(Module, Function, Args) ->
     erlang:apply(Module, Function, Args).
 
+%%notify(Message, State) ->
+%%    Subscriptions = State#?STATE.subscriptions,
+%%    CallbackState = State#?STATE.callback_state,
+%%    {MsgType, _, _} = DecodedMsg = of_msg_lib:decode(Message),
+%%    Subscribers = ets:lookup(Subscriptions, MsgType),
+%%    icontrol_ofsh:handle_message(Message, CallbackState), %% TODO fix subscribers
+%%    notify_subscriber(Subscribers, DecodedMsg, CallbackState).
+
+
 notify(Message, State) ->
-    Subscriptions = State#?STATE.subscriptions,
     CallbackState = State#?STATE.callback_state,
-    {MsgType, _, _} = DecodedMsg = of_msg_lib:decode(Message),
-    Subscribers = ets:lookup(Subscriptions, MsgType),
-    icontrol_ofsh:handle_message(Message, CallbackState), %% TODO fix subscribers
-    notify_subscriber(Subscribers, DecodedMsg, CallbackState).
+    icontrol_ofsh:handle_message(Message, CallbackState).
 
-notify_subscriber([], _Message, _CallbackState) ->
-    ok;
-notify_subscriber([{_Type, Module, Filter}|Rest], DecodedMsg, CallbackState) ->
-    case subscriber_filter(Filter, DecodedMsg) of
-        true ->
-            case do_callback(Module, handle_message, [DecodedMsg, CallbackState]) of
-                ok ->
-                    notify_subscriber(Rest, DecodedMsg, CallbackState);
-                {terminate, Reason} ->
-                    {error, Reason}
-            end;
-        _ ->
-            notify_subscriber(Rest, DecodedMsg, CallbackState)
-    end.
-
-subscriber_filter(true, _DecodedMsg) -> true;
-subscriber_filter(Fn, DecodedMsg) when is_function(Fn) ->
-    % catch errors?
-    Fn(DecodedMsg).
+%%notify_subscriber([], _Message, _CallbackState) ->
+%%    ok;
+%%notify_subscriber([{_Type, Module, Filter}|Rest], DecodedMsg, CallbackState) ->
+%%    case subscriber_filter(Filter, DecodedMsg) of
+%%        true ->
+%%            case do_callback(Module, handle_message, [DecodedMsg, CallbackState]) of
+%%                ok ->
+%%                    notify_subscriber(Rest, DecodedMsg, CallbackState);
+%%                {terminate, Reason} ->
+%%                    {error, Reason}
+%%            end;
+%%        _ ->
+%%            notify_subscriber(Rest, DecodedMsg, CallbackState)
+%%    end.
+%%
+%%subscriber_filter(true, _DecodedMsg) -> true;
+%%subscriber_filter(Fn, DecodedMsg) when is_function(Fn) ->
+%%    % catch errors?
+%%    Fn(DecodedMsg).

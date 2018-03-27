@@ -91,4 +91,6 @@ terminate(Reason, #?STATE{
                                 handler_pid = Pid,
                                 message_pid = MessagePid,
                                 connection = Connection}) ->
-    ok = ofs_handler_logic:ofd_terminate(Pid, MessagePid, Connection, Reason).
+    ok = ofs_handler_logic:ofd_terminate(Pid, MessagePid, Connection, Reason);
+
+terminate(_Reason, _State) -> ok.
